@@ -2,6 +2,27 @@
 // La Cabaña — Interactividad
 // ==========================================================
 (() => {
+  // ---------- Preloader ----------
+  document.body.classList.add("is-loading");
+  const preloader = document.getElementById("preloader");
+  const hidePreloader = () => {
+    if (!preloader) return;
+    // Minimum show time so the animation feels intentional
+    const minDelay = 1700;
+    const start = window.__loadStart || performance.now();
+    const elapsed = performance.now() - start;
+    const wait = Math.max(0, minDelay - elapsed);
+    setTimeout(() => {
+      preloader.classList.add("is-done");
+      document.body.classList.remove("is-loading");
+      setTimeout(() => preloader.remove(), 800);
+    }, wait);
+  };
+  window.__loadStart = performance.now();
+  window.addEventListener("load", hidePreloader);
+  // Fallback in case load never fires
+  setTimeout(hidePreloader, 5000);
+
   const WHATSAPP = "593959516383";
   const tabsEl = document.getElementById("tabs");
   const chipsEl = document.getElementById("chips");
