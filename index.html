@@ -19,17 +19,22 @@
 
   <!-- PRELOADER -->
   <div class="preloader" id="preloader" aria-hidden="true">
+    <canvas class="preloader__canvas" id="sparkCanvas"></canvas>
     <div class="preloader__embers"></div>
     <div class="preloader__inner">
       <div class="preloader__logo-wrap">
+        <div class="preloader__halo"></div>
         <div class="preloader__ring"></div>
         <div class="preloader__ring preloader__ring--2"></div>
+        <div class="preloader__ring preloader__ring--3"></div>
         <img src="logo.png" alt="La Cabaña Mar & Grill" class="preloader__logo" />
         <div class="preloader__flame">
-          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
         </div>
       </div>
-      <p class="preloader__tag">Encendiendo la parrilla<span class="dots"><i>.</i><i>.</i><i>.</i></span></p>
+      <p class="preloader__tag">
+        <span class="preloader__type" data-text="ENCENDIENDO LA PARRILLA"></span><span class="dots"><i>.</i><i>.</i><i>.</i></span>
+      </p>
       <div class="preloader__bar"><div class="preloader__bar-fill"></div></div>
     </div>
   </div>

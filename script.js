@@ -5,23 +5,92 @@
   // ---------- Preloader ----------
   document.body.classList.add("is-loading");
   const preloader = document.getElementById("preloader");
+  window.__loadStart = performance.now();
+
+  // Typewriter effect
+  const typeEl = preloader && preloader.querySelector(".preloader__type");
+  if (typeEl) {
+    const text = typeEl.dataset.text || "";
+    let i = 0;
+    const tick = () => {
+      typeEl.textContent = text.slice(0, i);
+      i = (i + 1) % (text.length + 8);
+      if (typeEl._t) clearTimeout(typeEl._t);
+      typeEl._t = setTimeout(tick, i > text.length ? 700 : 70);
+    };
+    tick();
+  }
+
+  // Spark particles canvas
+  let sparkRAF = null;
+  const canvas = document.getElementById("sparkCanvas");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const sizeCanvas = () => {
+      canvas.width = window.innerWidth * DPR;
+      canvas.height = window.innerHeight * DPR;
+      ctx.scale(DPR, DPR);
+    };
+    sizeCanvas();
+    window.addEventListener("resize", sizeCanvas);
+
+    const sparks = [];
+    const spawn = () => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2 + 130;
+      sparks.push({
+        x: cx + (Math.random() - 0.5) * 40,
+        y: cy,
+        vx: (Math.random() - 0.5) * 2.4,
+        vy: -(2 + Math.random() * 4),
+        life: 1,
+        size: 1.5 + Math.random() * 2,
+        hue: 20 + Math.random() * 40
+      });
+    };
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (Math.random() < 0.8) for (let k = 0; k < 3; k++) spawn();
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.vy += 0.04;          // gravity-ish
+        s.vx *= 0.99;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.012;
+        if (s.life <= 0) { sparks.splice(i, 1); continue; }
+        const a = Math.max(0, s.life);
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${s.hue}, 100%, ${50 + a * 30}%, ${a})`;
+        ctx.shadowColor = `hsla(${s.hue}, 100%, 60%, ${a})`;
+        ctx.shadowBlur = 10;
+        ctx.arc(s.x, s.y, s.size * a, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      sparkRAF = requestAnimationFrame(draw);
+    };
+    draw();
+  }
+
   const hidePreloader = () => {
     if (!preloader) return;
-    // Minimum show time so the animation feels intentional
-    const minDelay = 1700;
+    const minDelay = 2200;
     const start = window.__loadStart || performance.now();
     const elapsed = performance.now() - start;
     const wait = Math.max(0, minDelay - elapsed);
     setTimeout(() => {
       preloader.classList.add("is-done");
       document.body.classList.remove("is-loading");
-      setTimeout(() => preloader.remove(), 800);
+      setTimeout(() => {
+        if (sparkRAF) cancelAnimationFrame(sparkRAF);
+        if (typeEl && typeEl._t) clearTimeout(typeEl._t);
+        preloader.remove();
+      }, 900);
     }, wait);
   };
-  window.__loadStart = performance.now();
   window.addEventListener("load", hidePreloader);
-  // Fallback in case load never fires
-  setTimeout(hidePreloader, 5000);
+  setTimeout(hidePreloader, 6000);
 
   const WHATSAPP = "593959516383";
   const tabsEl = document.getElementById("tabs");
