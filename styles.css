@@ -765,7 +765,7 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 24px;
   padding: 20px;
   animation: innerEnter 1s cubic-bezier(.2,.8,.2,1) both;
 }
@@ -776,11 +776,12 @@ img { max-width: 100%; display: block; }
 
 .preloader__logo-wrap {
   position: relative;
-  width: 260px;
-  height: 260px;
+  width: 220px;
+  height: 184px; /* matches logo aspect ratio (720x604) at 220px wide */
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 24px; /* room for flames below */
 }
 
 /* Massive radial halo behind logo */
@@ -801,10 +802,14 @@ img { max-width: 100%; display: block; }
   50%      { transform: scale(1.15); opacity: 1; }
 }
 
-/* Triple rotating rings */
+/* Triple rotating rings — sized as squares centered on the wrap */
 .preloader__ring {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  width: 240px;
+  height: 240px;
+  margin: -120px 0 0 -120px;
   border: 2px solid transparent;
   border-top-color: var(--gold);
   border-right-color: var(--gold-soft);
@@ -813,7 +818,8 @@ img { max-width: 100%; display: block; }
   box-shadow: 0 0 20px rgba(212, 160, 23, 0.3);
 }
 .preloader__ring--2 {
-  inset: 18px;
+  width: 200px; height: 200px;
+  margin: -100px 0 0 -100px;
   border: 2px dashed transparent;
   border-bottom-color: rgba(212, 160, 23, 0.6);
   border-left-color: rgba(212, 160, 23, 0.35);
@@ -821,7 +827,8 @@ img { max-width: 100%; display: block; }
   box-shadow: none;
 }
 .preloader__ring--3 {
-  inset: -22px;
+  width: 280px; height: 280px;
+  margin: -140px 0 0 -140px;
   border: 1px solid transparent;
   border-top-color: rgba(255, 200, 80, 0.4);
   border-bottom-color: rgba(255, 100, 40, 0.3);
@@ -834,7 +841,8 @@ img { max-width: 100%; display: block; }
 .preloader__logo {
   position: relative;
   z-index: 2;
-  width: 180px;
+  width: 100%;
+  max-width: 220px;
   height: auto;
   filter:
     drop-shadow(0 0 25px rgba(255, 140, 40, 0.5))
@@ -857,14 +865,14 @@ img { max-width: 100%; display: block; }
   }
 }
 
-/* Flames under logo */
+/* Flames under logo — anchored right below the actual logo */
 .preloader__flame {
   position: absolute;
-  bottom: -10px;
+  bottom: -50px;
   left: 50%;
   transform: translateX(-50%);
   width: 120px;
-  height: 100px;
+  height: 70px;
   pointer-events: none;
 }
 .preloader__flame span {

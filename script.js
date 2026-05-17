@@ -37,10 +37,17 @@
 
     const sparks = [];
     const spawn = () => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2 + 130;
+      // Anchor sparks to the logo wrap so layout shifts don't break them
+      const wrap = document.querySelector(".preloader__logo-wrap");
+      let cx = window.innerWidth / 2;
+      let cy = window.innerHeight / 2 + 60;
+      if (wrap) {
+        const r = wrap.getBoundingClientRect();
+        cx = r.left + r.width / 2;
+        cy = r.bottom + 10;
+      }
       sparks.push({
-        x: cx + (Math.random() - 0.5) * 40,
+        x: cx + (Math.random() - 0.5) * 60,
         y: cy,
         vx: (Math.random() - 0.5) * 2.4,
         vy: -(2 + Math.random() * 4),
